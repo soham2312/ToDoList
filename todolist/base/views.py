@@ -9,12 +9,6 @@ from django.contrib.auth import login
 from django.shortcuts import redirect
 
 # Create your views here.
-def generateOTP() :
-     digits = "0123456789"
-     OTP = ""
-     for i in range(4) :
-         OTP += digits[math.floor(random.random() * 10)]
-     return OTP
      
 class RegisterPage(FormView):
     template_name='base/register.html'

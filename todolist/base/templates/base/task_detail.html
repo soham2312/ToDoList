@@ -1,24 +1,27 @@
-<h1>Task: {{object}}</h1>
-
-<a href="{% url 'tasks' %}">Back to List</a>
-
-<table>
-    <tr>
-        <th>
-            Item
-        </th>
-    </tr>
-    <tr>
-        <td>
-           <h2>Description</h2> 
-        </td>
-    </tr>
-    <tr><td>{{object.description}}</td></tr>
-    <tr><td>
-        {% if object.complete %}
-            <h2>Completed</h2>
-        {% else %}
-            <h2>Incomplete</h2>
-        {% endif %}
-         </td></tr>
-    </table>
+<div style="background-color: #f2f2f2; display: flex; align-items: center; justify-content: center; height: 100vh;">
+    <div style="background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.2); max-width: 600px; width: 100%;">
+      <h1 style="text-align: center; color: #333; margin-bottom: 20px;">Task: {{ object }}</h1>
+      <a href="{% url 'tasks' %}" style="display: block; text-align: center; margin-bottom: 20px;">Back to List</a>
+      <table style="width: 100%;">
+        <tr>
+          <th style="padding: 10px; text-align: center; background-color: #333; color: #fff; font-size: 18px; border-radius: 5px;">Item</th>
+        </tr>
+        <tr>
+          <td style="padding: 20px;">
+            <h2 style="color: #333;">Description</h2> 
+            <p style="color: #666; margin-top: 10px;">{{ object.description }}</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px;">
+            {% if object.complete %}
+              <h2 style="color: #333;">Completed</h2>
+            {% else %}
+              <h2 style="color: #333;">Incomplete</h2>
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  
