@@ -1,7 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
+
+class profile(models.Model):
+    user=models.OneToOneField(User,null=True,on_delete=models.CASCADE)
+    email_token=models.CharField(max_length=200)
+    is_verified=models.BooleanField(default=False)
+
 class task(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     title=models.CharField(max_length=200)
