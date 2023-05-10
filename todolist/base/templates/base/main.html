@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do Tasks</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap"
+    />
+    <style>
+      /* Set up basic styles for the page */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #f5f5f5;
+        font-family: "Nunito", sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        margin-top: 15vh;
+      }
+      /* Center the container div */
+      .container {
+        max-width: 560px;
+        margin: 0 auto;
+        /* padding: 20px; */
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+      /* Style the heading */
+      h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      /* Style the task list */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px 5px 0 0;
+        background: linear-gradient(
+          90deg,
+          #eea390 0%,
+          #eb796f 43%,
+          #eb796f 100%
+        );
+      }
+      .header a {
+        color: rgb(247, 247, 247);
+        text-decoration: none;
+      }
+      .task-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        background-color: #fff;
+        border-top: 1px solid #f5f5f5;
+      }
+      .task-title {
+        display: flex;
+        padding: 20px;
+      }
+
+      .task-title a {
+        text-decoration: none;
+        color: #4b5156;
+        margin-left: 10px;
+      }
+      .task-complete-icon {
+        height: 20px;
+        width: 20px;
+        background-color: rgb(105, 192, 105);
+        border-radius: 50%;
+      }
+
+      .task-incomplete-icon {
+        height: 20px;
+        width: 20px;
+        background-color: rgb(218, 218, 218);
+        border-radius: 50%;
+      }
+
+      .delete-link {
+        text-decoration: none;
+        font-weight: 900;
+        color: #cf4949;
+        font-size: 22px;
+        line-height: 0;
+        padding-left: 20px;
+      }
+      .enter{
+        text-decoration: none;
+        font-weight: 900;
+        color: #cf4949;
+        font-size: 18px;
+        
+      }
+      #add-link {
+        color: #eb796f;
+        text-decoration: none;
+        font-size: 42px;
+        text-shadow: 1px 1px #81413b;
+      }
+
+      #search-add-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+      }
+      .button,
+      .active {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        background: #EB796F;
+        border-radius: 5px;
+        border-color: #fff;
+        color: #fff;
+        font-weight: 500;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .button:hover,
+      .active:hover {
+        background-color: #cf4949;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+      }
+      
+      ul {
+        margin-top: 20px;
+        list-style: none;
+      }
+      li {
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+      }
+      .card-body {
+            padding: 20px;
+        }
+        label {
+            padding-top: 10px !important;
+            display: block;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">{% block content %} {% endblock content %}</div>
+  </body>
+</html>

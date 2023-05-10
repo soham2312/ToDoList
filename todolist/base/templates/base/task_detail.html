@@ -1,24 +1,15 @@
-<h1>Task: {{object}}</h1>
-
-<a href="{% url 'tasks' %}">Back to List</a>
-
-<table>
-    <tr>
-        <th>
-            Item
-        </th>
-    </tr>
-    <tr>
-        <td>
-           <h2>Description</h2> 
-        </td>
-    </tr>
-    <tr><td>{{object.description}}</td></tr>
-    <tr><td>
-        {% if object.complete %}
-            <h2>Completed</h2>
+{% extends 'base/main.html' %}
+{% block content %}
+<div class="header-bar">
+    <a href="{% url 'tasks' %}">&#8592; Back</a>
+</div>
+<div class="card-body">
+    <h1>Task: {{object}}</h1>
+    <h3>Description :{{object.description}}</h3>
+    {% if object.complete %}
+            <h2>Task is Completed</h2>
         {% else %}
-            <h2>Incomplete</h2>
+            <h2>Task is Incomplete</h2>
         {% endif %}
-         </td></tr>
-    </table>
+</div>
+{% endblock content %}
