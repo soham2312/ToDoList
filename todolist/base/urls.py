@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import TaskList,TaskDetail,TaskCreate,TaskUpdate,TaskDelete,CustomLoginView,CustomLogoutView,RegisterPage
+from .views import TaskList,TaskDetail,TaskCreate,TaskUpdate,TaskDelete,CustomLoginView,CustomLogoutView,RegisterPage,OTPView
 
 urlpatterns = [
+    path("otp/<str:uid>/",OTPView.as_view(),name="otp"),
     path("login/",CustomLoginView.as_view(),name="login"),
     path("logout/",CustomLogoutView.as_view(),name="logout"),
     path("register/",RegisterPage.as_view(),name="register"),
