@@ -8,6 +8,9 @@ class Profile(models.Model):
     otp=models.CharField(max_length=100,null=True,blank=True)
     uid=models.UUIDField(default=uuid.uuid4)
 
+    class Meta:
+        ordering=['otp']
+
 
 
 class task(models.Model):

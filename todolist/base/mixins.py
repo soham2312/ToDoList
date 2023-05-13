@@ -1,6 +1,7 @@
 from django.conf import settings
 from twilio.rest import Client
 import random
+from django.db import models
 
 class MessageHandler:
     phone_number = None
@@ -17,3 +18,7 @@ class MessageHandler:
         except Exception as e:
             print(e)
             return False
+
+class AuditModelMixin:
+    class Meta:
+        abstract = False

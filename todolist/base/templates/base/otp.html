@@ -1,13 +1,13 @@
-{% extends base/main.html %}
+
+{% extends 'base/main.html' %}
 {% block content %}
 <div class="header-bar">
-    <h1>OTP</h1>
+    <a href="{% url 'tasks' %}">&#8592; Back</a>
 </div>
 <div class="card-body">
     <form method="POST">
         {% csrf_token %}
-        <label>OTP</label>
-        <input type="text" id="otp-input" name="otp">
+        {{form.as_p}}
         <input style="margin-top:10px ;" class="button" type="submit" value="Submit">
     </form>
 </div>
