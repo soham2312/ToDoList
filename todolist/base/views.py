@@ -6,10 +6,12 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView,LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
+from django.urls import reverse
 from django.contrib.auth import login
 from django.shortcuts import redirect
 from .mixins import *
 import random
+from urllib.parse import quote_from_bytes
 
 # Create your views here.
      
@@ -26,43 +28,42 @@ class RegisterPage(FormView):
         password=form.cleaned_data.get('password1')
         user=form.save();
         profile=Profile.objects.create(user=user,phone_number=phone_number)
-        if user is not None:
+        if user is None:
             return redirect('register')
         return super(RegisterPage,self).form_valid(form)
 
     def get(self,*args,**kwargs):
         if self.request.user.is_authenticated:
-            return redirect('tasks')
+            return redirect('login')
         return super(RegisterPage,self).get(*args,**kwargs)
 
 class CustomLogoutView(LogoutView):
     next_page='login'
 
-
 class CustomLoginView(LoginView):
-    template_name='base/login.html'
-    fields=['username','password']
-    redirect_authenticated_user=True
-    
+    template_name = 'base/login.html'
+    fields = '__all__'
+    redirect_authenticated_user = True
+
     def get_success_url(self):
         profile=Profile.objects.filter(user=self.request.user)
         if not profile.exists():
             return redirect('register')
         profile[0].otp = int(random.randint(1000,9999))
         profile[0].save()
-        print(profile[0].uid)
-        # MessageHandler(profile[0].phone_number,1111).send_otp()
-        return reverse_lazy('otp',kwargs={'uid':profile[0].uid})
+         # MessageHandler(profile[0].phone_number,profile[0].otp).send_otp()
+        return reverse_lazy('otp',kwargs={'pk':profile[0].uid})
+    
 
-class OTPView(FormView):
+class OTPView(OTPForm):
     template_name='base/otp.html'
     # form_class=OTPForm
     fields=['otp']
-    success_url=reverse_lazy('tasks')
+    success_url=reverse_lazy('login')
 
     def form_valid(self,form,*args,**kwargs):
         otp=form.cleaned_data.get('otp')
-        uid=self.kwargs['uid']
+        uid=self.kwargs['pk']
         profile=Profile.objects.filter(uid=uid)
         if profile[0].otp == otp:
             login(profile.user,self.request)
@@ -71,7 +72,7 @@ class OTPView(FormView):
         return super(OTPView,self).form_valid(form)
         
     def get(self,*args,**kwargs):
-        uid=self.kwargs['uid']
+        uid=self.kwargs['pk']
         profile=Profile.objects.filter(uid=uid)
         if profile[0].otp is None:
             return redirect('login')
