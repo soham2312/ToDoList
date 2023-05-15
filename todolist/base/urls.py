@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import TaskList,TaskDetail,TaskCreate,TaskUpdate,TaskDelete,CustomLoginView,CustomLogoutView,RegisterPage,OTPView
+from .views import TaskList,TaskDetail,TaskCreate,TaskUpdate,TaskDelete,CustomLoginView,CustomLogoutView,RegisterPage,OTPView,task_changes
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic.base import RedirectView
@@ -14,4 +14,5 @@ urlpatterns = [
     path("task-create/",TaskCreate.as_view(),name="task-create"),
     path("task-update/<int:pk>/",TaskUpdate.as_view(),name="task-update"),
     path("task-delete/<int:pk>/",TaskDelete.as_view(),name="task-delete"),
+    path('task-changes/', task_changes, name='task-changes')
 ]

@@ -12,10 +12,23 @@ from django.shortcuts import redirect
 from .mixins import *
 import random
 from django.contrib.auth import login
+from django.contrib import messages
+from django.http import JsonResponse
 
 
 
 # Create your views here.
+
+def task_changes(request):
+    if request.method == 'POST':
+        task_ids = request.POST.getlist('task_ids[]')
+        complete = request.POST.get('complete', False)
+        if complete:
+            task.objects.filter(id__in=task_ids).update(complete=True)
+        else:
+            task.objects.filter(id__in=task_ids).update(complete=False)
+        
+        return JsonResponse({'success':True}, status=200)
      
 class RegisterPage(FormView):
     template_name='base/register.html'
@@ -51,9 +64,12 @@ class CustomLoginView(LoginView):
         profile=Profile.objects.filter(user=self.request.user)
         if not profile.exists():
             return redirect('register')
-        profile[0].otp = str(random.randint(1000,9999))
+        print(profile[0].otp)
+        print('fuck')
+        profile[0].otp =str(random.randint(1000,9999))
         profile[0].save()
-         # MessageHandler(profile[0].phone_number,profile[0].otp).send_otp()
+        print(profile[0].otp)
+        # MessageHandler(profile[0].phone_number,profile[0].otp).send_otp()
         return reverse_lazy('otp',kwargs={'pk':profile[0].uid})
     
 
@@ -67,13 +83,12 @@ class OTPView(LoginRequiredMixin,CreateView):
         otp=form.cleaned_data.get('otp')
         uid=self.kwargs['pk']
         profile=Profile.objects.filter(uid=uid)
-        print(profile[0].otp)
         if profile[0].otp == otp:
             
             return redirect('tasks')
         else:
             return redirect('login')
-    # return super(OTPView,self).form_valid(form)
+
 class TaskList(LoginRequiredMixin,ListView):
     model=task  
     template_name='base/task_list.html'
@@ -109,11 +124,19 @@ class TaskCreate(LoginRequiredMixin,CreateView):
 class TaskUpdate(LoginRequiredMixin,UpdateView):
     model=task
     template_name='base/task_create.html'
-    fields=['user','title','description','complete']
+    fields=['title','description','complete']
     success_url=reverse_lazy('tasks')
+    def form_valid(self,form):
+        form.instance.user=self.request.user
+        return super(TaskUpdate,self).form_valid(form)
+    
 
 class TaskDelete(LoginRequiredMixin,DeleteView):
     model=task
     template_name='base/task_delete.html'
     context_object_name='task'
     success_url=reverse_lazy('tasks')
+
+def check_mychecklist(request):
+    if request.method == 'POST':
+        task.objects.filter(id=request.user.id).delete()

@@ -5,9 +5,8 @@ import uuid
 class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile',unique=True,null=True,blank=True)
     phone_number=models.CharField(max_length=13,null=True,blank=True)
-    otp=models.CharField(max_length=100,null=True,blank=True)
+    otp=models.CharField(max_length=4,null=True,blank=True)
     uid=models.UUIDField(default=uuid.uuid4)
-
     class Meta:
         ordering=['otp']
 
