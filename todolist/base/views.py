@@ -95,9 +95,22 @@ class TaskList(LoginRequiredMixin,ListView):
     def post(self,request,*args,**kwargs):
         if request.method=='POST':
             task_ids=request.POST.getlist('id[]')
+            complete_ids=request.POST.getlist('ideas[]')
+            for id in complete_ids:
+                t=task.objects.get(id=id)
+                t.complete=True
+                t.save()
             for id in task_ids:
                 task.objects.get(id=id).delete()
             return redirect('tasks')
+    # def post(self,request,*args,**kwargs):
+    #     if request.method=='POST':
+    #         task_ids=request.POST.getlist('ideas[]')
+    #         for id in task_ids:
+    #             t=task.objects.get(id=id)
+    #             t.complete=True
+    #             t.save()
+    #         return redirect('tasks')
 
 class TaskDetail(LoginRequiredMixin,DetailView):
     model=task
