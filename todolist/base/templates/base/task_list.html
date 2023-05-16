@@ -1,4 +1,5 @@
 {% extends 'base/main.html' %} {% block content %}
+
 <div class="header">
   <div style="padding: 10px">
     <h1 style="color: white">Hello {{request.user|title}}</h1>
@@ -17,8 +18,11 @@
     <input type="text" name="search-area" value="{{search_input}}" />
     <input class="button" type="submit" value="Search" />
   </form>
-  <input class="button" type="submit" value="Complete"  />
-  <input class="button" type="submit" value="Delete" />
+  <form method="POST" style="display: flex">
+   {% csrf_token %}
+  <button class="btn_complete" type="submit">Complete</button>
+  <button type="submit" class="btn_delete">Delete</button>
+</form>
   <a id="add-link" href="{% url 'task-create' %}">&#x2b</a>
   
 </div>
@@ -27,7 +31,7 @@
   <div class="task-item">
     {% if task.complete %}
     <div class="task-title">
-      <input type="checkbox"/>
+      <input type="checkbox" name="task_ids[]" value="{{task.id}}" />
       <div class="task-complete-icon" style="margin-left: 20px;"></div>
       <i><s><a href="{% url 'task-update' task.id %}">{{task}}</a></s></i>
     </div>
@@ -35,10 +39,9 @@
     <a class="delete-link" href="{% url 'task-delete' task.id %}">&#215;</a>
     {% else %}
     <div class="task-title">
-      <input type="checkbox"/>
-      
-      <div class="task-incomplete-icon" style="margin-left: 20px;"></div>
-      <a href="{% url 'task-update' task.id %}">{{task}}</a>
+      <input type="checkbox" name="task_ids[]" value="{{task.id}}" />
+    <div class="task-incomplete-icon" style="margin-left: 20px;"></div>
+     <a href="{% url 'task-update' task.id %}">{{task}}</a>
     </div>
     <a class="enter" href="{% url 'task' task.id %}">&#8627;</a>
     <a class="delete-link" href="{% url 'task-delete' task.id %}">&#215;</a>

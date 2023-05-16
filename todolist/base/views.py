@@ -19,16 +19,7 @@ from django.http import JsonResponse
 
 # Create your views here.
 
-def task_changes(request):
-    if request.method == 'POST':
-        task_ids = request.POST.getlist('task_ids[]')
-        complete = request.POST.get('complete', False)
-        if complete:
-            task.objects.filter(id__in=task_ids).update(complete=True)
-        else:
-            task.objects.filter(id__in=task_ids).update(complete=False)
-        
-        return JsonResponse({'success':True}, status=200)
+
      
 class RegisterPage(FormView):
     template_name='base/register.html'
@@ -64,11 +55,8 @@ class CustomLoginView(LoginView):
         profile=Profile.objects.filter(user=self.request.user)
         if not profile.exists():
             return redirect('register')
-        print(profile[0].otp)
-        print('fuck')
         profile[0].otp =str(random.randint(1000,9999))
         profile[0].save()
-        print(profile[0].otp)
         # MessageHandler(profile[0].phone_number,profile[0].otp).send_otp()
         return reverse_lazy('otp',kwargs={'pk':profile[0].uid})
     
@@ -95,7 +83,6 @@ class TaskList(LoginRequiredMixin,ListView):
     context_object_name='tasks'
     def get_context_data(self,**kwargs):
         context=super().get_context_data(**kwargs)
-        context['color']='red'
         context['tasks']=context['tasks'].filter(user=self.request.user)
         context['count']=context['tasks'].filter(complete=False).count()
         
@@ -105,6 +92,12 @@ class TaskList(LoginRequiredMixin,ListView):
         
         context['search_input']=search_input
         return context
+    def post(self,request,*args,**kwargs):
+        if request.method=='POST':
+            task_ids=request.POST.getlist('id[]')
+            for id in task_ids:
+                task.objects.get(id=id).delete()
+            return redirect('tasks')
 
 class TaskDetail(LoginRequiredMixin,DetailView):
     model=task
@@ -136,6 +129,29 @@ class TaskDelete(LoginRequiredMixin,DeleteView):
     template_name='base/task_delete.html'
     context_object_name='task'
     success_url=reverse_lazy('tasks')
+
+class TaskMultidelete(LoginRequiredMixin,DeleteView):
+    model=task
+    context_object_name='task'
+    success_url=reverse_lazy('tasks')
+    def post(self,request,*args,**kwargs):
+        task_ids=request.POST.getlist('task_ids[]')
+        task.objects.filter(id__in=task_ids).delete()
+        return JsonResponse({'success':True},status=200)
+    
+#     def Getlist(request):
+#         if request.method=='POST':
+#             task_ids=request.POST.getlist('task_ids[]')
+#             print(task_ids)
+#             return JsonResponse({'success':True},status=200)
+        
+# def multidelete(request):
+#     if request.method=='POST':
+#         task_ids=request.POST.getlist('task_ids[]')
+#         task.objects.filter(id__in=task_ids).delete()
+#         return JsonResponse({'success':True},status=200)
+
+    
 
 def check_mychecklist(request):
     if request.method == 'POST':
