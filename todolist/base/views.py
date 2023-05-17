@@ -57,7 +57,7 @@ class CustomLoginView(LoginView):
             return redirect('register')
         profile[0].otp =str(random.randint(1000,9999))
         profile[0].save()
-        # MessageHandler(profile[0].phone_number,profile[0].otp).send_otp()
+        # MessageHandler(profile[0].phone_number,2635).send_otp()
         return reverse_lazy('otp',kwargs={'pk':profile[0].uid})
     
 
@@ -71,8 +71,9 @@ class OTPView(LoginRequiredMixin,CreateView):
         otp=form.cleaned_data.get('otp')
         uid=self.kwargs['pk']
         profile=Profile.objects.filter(uid=uid)
+        print(profile[0].otp)
+        print(otp)
         if profile[0].otp == otp:
-            
             return redirect('tasks')
         else:
             return redirect('login')
